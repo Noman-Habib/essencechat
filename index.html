@@ -613,8 +613,6 @@ async function callAI(userMessage) {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({
-      model: 'claude-sonnet-4-20250514',
-      max_tokens: 1000,
       system: SYSTEM_PROMPT,
       messages: messages
     })
@@ -622,12 +620,12 @@ async function callAI(userMessage) {
 
   if (!response.ok) {
     const errData = await response.json().catch(() => ({}));
-    console.error('Anthropic error:', response.status, errData);
+    console.error('Gemini error:', response.status, errData);
     throw new Error('Status ' + response.status + ': ' + JSON.stringify(errData));
   }
 
   const data = await response.json();
-  const reply = data.content.map(b => b.text || '').join('');
+  const reply = data.text || '';
   messages.push({ role: 'assistant', content: reply });
   return reply;
 }
@@ -697,7 +695,7 @@ function submitKey() {
   greet();
 }
 
-greet();
+showKeyScreen();
 </script>
 </body>
 </html>
